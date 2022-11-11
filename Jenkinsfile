@@ -9,7 +9,7 @@ pipeline{
                 steps{
                     script{
                         cleanWs()
-                        sh "cleanedup workspace for $BUILD_DISPLAY_NAME"
+          
                     }
                 }
             }
