@@ -1,4 +1,3 @@
-
 pipeline{
     agent any
     environment { 
@@ -31,13 +30,15 @@ pipeline{
                 }
             }
             stage ('push to DH') {
-            withCredentials([string(credentialsId: 'DOCKER_TOKEN', variable: 'DOCKER_TOKEN')]) {
-                 sh "docker login -u $DOCKER_USR_NAME -p $DOCKER_TOKEN"
+                steps{
+                    withCredentials([string(credentialsId: 'DOCKER_TOKEN', variable: 'DOCKER_TOKEN')]) {
+                     sh "docker login -u $DOCKER_USR_NAME -p $DOCKER_TOKEN"
                  
-                 } 
+                    } 
                  sh "docker push $DOCKER_USR_NAME/$IMAGE_NMAE:$BUILD_NUMBER"
                  sh "docker push $DOCKER_USR_NAME/$IMAGE_NMAE:latest"
-
+                }
             }
         }
     }
+
