@@ -5,7 +5,7 @@ pipeline{
                 steps{
                     script{
                         cleanWs()
-                        sh "cleanedup workspace for $BUILD_NAME"
+                        sh "cleanedup workspace for $JOB_NAME"
                     }
                 }
             }
