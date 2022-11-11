@@ -1,5 +1,5 @@
 pipeline{
-    agent{
+    agent any
         stages{
             stage ('clean WS'){
                 steps{
@@ -26,4 +26,4 @@ pipeline{
             }
         }
     }
-}
+
