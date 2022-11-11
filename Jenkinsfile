@@ -1,10 +1,16 @@
+
 pipeline{
     agent any
+    environment { 
+        DOCKER_USR_NAME = 'nageshle204'
+        IMAGE_NMAE = 'webapps'
+    }
         stages{
             stage ('clean WS'){
                 steps{
                     script{
                         cleanWs()
+                        sh "cleanedup workspace for $BUILD_DISPLAY_NAME"
                     }
                 }
             }
@@ -20,9 +26,18 @@ pipeline{
             }
             stage ('Containerizing') {
                 steps{
-                    sh 'docker build -t sample:0.1.0 .'
+                    sh "docker build -t $DOCKER_USR_NAME/$IMAGE_NMAE:$BUILD_NUMBER ."
+                    sh "docker tag $DOCKER_USR_NAME/$IMAGE_NMAE:$BUILD_NUMBER $DOCKER_USR_NAME/$IMAGE_NMAE:latest"
                 }
+            }
+            stage ('push to DH') {
+            withCredentials([string(credentialsId: 'DOCKER_TOKEN', variable: 'DOCKER_TOKEN')]) {
+                 sh "docker login -u $DOCKER_USR_NAME -p $DOCKER_TOKEN"
+                 
+                 } 
+                 sh "docker push $DOCKER_USR_NAME/$IMAGE_NMAE:$BUILD_NUMBER"
+                 sh "docker push $DOCKER_USR_NAME/$IMAGE_NMAE:latest"
+
             }
         }
     }
-
